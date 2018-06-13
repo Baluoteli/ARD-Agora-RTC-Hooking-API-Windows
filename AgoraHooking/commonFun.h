@@ -161,11 +161,12 @@ public:
 	}
 
 	enum eHookPlayerType{
-		
+
 		ePlayer_NULL = -1,
 		ePlayer_KuGou,
 		ePlayer_CloudMusic,
-		
+		ePlayer_QQMusic,
+		ePlayer_KwMusic7,
 
 		ePlayer_UNKNOWN = 0xff
 	};
@@ -230,6 +231,10 @@ public:
 			strFormat = _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\ø·π∑“Ù¿÷"); break;
 		case eHookPlayerType::ePlayer_CloudMusic:
 			strFormat = _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Õ¯“◊‘∆“Ù¿÷"); break;
+		case eHookPlayerType::ePlayer_KwMusic7:
+			strFormat = _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\KwMusic7"); break;
+		case eHookPlayerType::ePlayer_QQMusic:
+			strFormat = _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\QQMusic"); break;
 		default:break;
 		}
 		

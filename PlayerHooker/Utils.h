@@ -76,6 +76,16 @@ static void ShowDebugInfo(const TCHAR* format,...)
 #define _FFLP_ "%s:" _FLP_
 #define _FFL_ __FILE__, _FL_
 
+	enum eHookPlayerType{
+
+		ePlayer_NULL = -1,
+		ePlayer_KuGou,
+		ePlayer_CloudMusic,
+		ePlayer_KwMusic7,
+		ePlayer_QQMusic,
+
+		ePlayer_UNKNOWN = 0xff
+	};
 
 static int GetBasicAudioVolume(int nVolume)
 {
@@ -93,6 +103,7 @@ std::string cs2s(const CString &str);
 int str2int(const std::string &str);
 int CS2int(const CString &csStr);
 bool findPlayerPath(char* exename, int namelen, TCHAR* playerPath);
+BOOL QueryDir(eHookPlayerType hookType, TCHAR* szBuffer);
 
 bool IsDebugMode(HINSTANCE HModule);
 bool IsSaveDumpPcm(HINSTANCE HModule);

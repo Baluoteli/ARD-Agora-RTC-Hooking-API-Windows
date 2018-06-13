@@ -6,9 +6,9 @@
 CExtendAudioFrameObserver::CExtendAudioFrameObserver()
 {
 	pPlayerData = new BYTE[0x800000];
-	DeleteFile(_T("./V6room/MusicDest.pcm"));
-	DeleteFile(_T("./V6room/FrameMix.pcm"));
-	DeleteFile(_T("./V6room/PlayOut.pcm"));
+	DeleteFile(_T("./AgoraHookLog/MusicDest.pcm"));
+	DeleteFile(_T("./AgoraHookLog/FrameMix.pcm"));
+	DeleteFile(_T("./AgoraHookLog/PlayOut.pcm"));
 }
 
 CExtendAudioFrameObserver::~CExtendAudioFrameObserver()
@@ -34,7 +34,7 @@ bool CExtendAudioFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
 			OutputDebugStringA(logMsg);
 
 			FILE* log;
-			log = fopen("./V6room/PlayerHookerV6_1.log", ("a+"));
+			log = fopen("./AgoraHookLog/PlayerHookerV6_1.log", ("a+"));
 			if (log != NULL)
 			{
 				SYSTEMTIME st;
@@ -54,7 +54,7 @@ bool CExtendAudioFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
 
 	if (gIsSaveDumpPcm)
 	{
-		FILE* outfile1 = fopen("./V6room/MusicDest.pcm", "ab+");
+		FILE* outfile1 = fopen("./AgoraHookLog/MusicDest.pcm", "ab+");
 		if (outfile1)
 		{
 			fwrite(this->pPlayerData, 1, datalen, outfile1);
@@ -72,7 +72,7 @@ bool CExtendAudioFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
 
 	if (gIsSaveDumpPcm)
 	{
-		FILE* outfile = fopen("./V6room/FrameMix.pcm", "ab+");
+		FILE* outfile = fopen("./AgoraHookLog/FrameMix.pcm", "ab+");
 		if (outfile)
 		{
 			fwrite(audioFrame.buffer, 1, nMixLen, outfile);
@@ -94,7 +94,7 @@ bool CExtendAudioFrameObserver::onPlaybackAudioFrame(AudioFrame& audioFrame)
 #if 0
 	if (bIsDebugMode)
 	{
-		FILE* outfile1 = fopen("./V6room/PlayOut.pcm", "ab+");
+		FILE* outfile1 = fopen("./AgoraHookLog/PlayOut.pcm", "ab+");
 		if (outfile1)
 		{
 			fwrite(this->pPlayerData, 1, nSize, outfile1);

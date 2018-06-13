@@ -94,6 +94,8 @@ public:
 	CAudioDataPool* CreateAudioDataPool(int bufferSize);
 	void DeleteHookDataPool(CAudioDataPool* pHookDataPool);
 
+	void setStrAPP(const TCHAR* pHookPlayerFilePath);
+
 	static CAPIHookLog ms_log;
 
 	static bool CanHandle(int sampleRate, int channel);

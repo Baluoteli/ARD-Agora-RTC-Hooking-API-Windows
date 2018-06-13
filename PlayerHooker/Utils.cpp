@@ -199,6 +199,38 @@ bool findPlayerPath(char* exename, int namelen, TCHAR* playerPath)
 	return TRUE;
 }
 
+BOOL QueryDir(eHookPlayerType hookType, TCHAR* szBuffer)
+{
+	CString strFormat;
+	switch (hookType)
+	{
+	case eHookPlayerType::ePlayer_KuGou:
+		strFormat = _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\ø·π∑“Ù¿÷"); break;
+	case eHookPlayerType::ePlayer_CloudMusic:
+		strFormat = _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Õ¯“◊‘∆“Ù¿÷"); break;
+	case eHookPlayerType::ePlayer_KwMusic7:
+		strFormat = _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\KwMusic7"); break;
+	case eHookPlayerType::ePlayer_QQMusic:
+		strFormat = _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\QQMusic"); break;
+	default:break;
+	}
+
+	HKEY hKey;
+	LONG lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, strFormat, 0, KEY_QUERY_VALUE, &hKey);
+	if (ERROR_SUCCESS != lRet)
+		return FALSE;
+
+	DWORD dwBufferLen = MAX_PATH;
+	lRet = RegQueryValueEx(hKey, L"DisplayIcon", NULL, NULL, (LPBYTE)szBuffer, &dwBufferLen);
+	if (ERROR_SUCCESS != lRet)
+		return FALSE;
+
+	RegCloseKey(hKey);
+	hKey = nullptr;
+
+	return TRUE;
+}
+
 bool IsDebugMode(HINSTANCE HModule)
 {
 	TCHAR szFilePath[MAX_PATH];

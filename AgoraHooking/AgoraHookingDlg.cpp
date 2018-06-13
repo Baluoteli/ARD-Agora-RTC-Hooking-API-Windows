@@ -335,6 +335,9 @@ inline void CAgoraHookingDlg::getRectClientRight(RECT &rt)
 
 void CAgoraHookingDlg::onButtonCloseClicked()
 {
+	if (m_lpHookPlayerInstance) 
+		m_lpHookPlayerInstance->stopHook();
+
 	if (m_lpAgoraObject)
 		m_lpAgoraObject->LeaveCahnnel();
 
@@ -353,21 +356,21 @@ void CAgoraHookingDlg::onButtonMinClicked()
 }
 
 LRESULT CAgoraHookingDlg::OnInviterJoinChannel(WPARAM wParam, LPARAM lParam)
-{	
+{
 	LPAGE_INVITER_JOINCHANNEL lpData = (LPAGE_INVITER_JOINCHANNEL)wParam;
 	if (lpData) {
 		
 		m_uInviter = lpData->uInviterId;
 		m_lpAgoraObject->LocalVideoPreview(m_hWndRightSelf, TRUE);
 		m_lpAgoraObject->JoinChannel(s2cs(m_strChannel), m_uLoginUid);
-	}
 
-	CString strDir;
-	CAgoraFormatStr::QueryDir(CAgoraFormatStr::eHookPlayerType::ePlayer_CloudMusic, strDir);
-	if (m_lpHookPlayerInstance) {
+		CString strDir;
+		CAgoraFormatStr::QueryDir(CAgoraFormatStr::eHookPlayerType(lpData->nHookType), strDir);
+		if (m_lpHookPlayerInstance) {
 
-		m_lpHookPlayerInstance->startHook(strDir.GetBuffer());
-		strDir.ReleaseBuffer();
+			m_lpHookPlayerInstance->startHook(strDir.GetBuffer());
+			strDir.ReleaseBuffer();
+		}
 	}
 
 	return TRUE;
@@ -391,7 +394,7 @@ LRESULT CAgoraHookingDlg::OnJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnRejoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_REJOINCHANNEL_SUCCESS lpData = (LPAGE_REJOINCHANNEL_SUCCESS)wParam;
-	if (lpData){
+	if (lpData) {
 
 		CAgoraFormatStr::AgoraWriteLog("Uid: %u Channel: %s RejoinChannelSuccess", lpData->uid, lpData->channel);
 		delete lpData; lpData = nullptr;
@@ -408,7 +411,7 @@ LRESULT CAgoraHookingDlg::OnWarning(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnError(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_ERROR lpData = (LPAGE_ERROR)wParam;
-	if (lpData){
+	if (lpData) {
 		
 		delete lpData; lpData = nullptr;
 	}
@@ -419,7 +422,7 @@ LRESULT CAgoraHookingDlg::OnError(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnAudioQuality(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_AUDIO_QUALITY lpData = (LPAGE_AUDIO_QUALITY)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -430,7 +433,7 @@ LRESULT CAgoraHookingDlg::OnAudioQuality(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnAudioVolumeIndication(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_AUDIO_VOLUME_INDICATION lpData = (LPAGE_AUDIO_VOLUME_INDICATION)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -441,7 +444,7 @@ LRESULT CAgoraHookingDlg::OnAudioVolumeIndication(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_LEAVE_CHANNEL lpData = (LPAGE_LEAVE_CHANNEL)wParam;
-	if (lpData){
+	if (lpData) {
 
 		CAgoraFormatStr::AgoraWriteLog("LeaveChannel uid: %u", lpData->rtcStat.users);
 		delete lpData; lpData = nullptr;
@@ -458,7 +461,7 @@ LRESULT CAgoraHookingDlg::OnRtcStats(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnMediaEngineEvent(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_MEDIA_ENGINE_EVENT lpData = (LPAGE_MEDIA_ENGINE_EVENT)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -469,7 +472,7 @@ LRESULT CAgoraHookingDlg::OnMediaEngineEvent(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnAudioDeviceStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_AUDIO_DEVICE_STATE_CHANGED lpData = (LPAGE_AUDIO_DEVICE_STATE_CHANGED)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -486,7 +489,7 @@ LRESULT CAgoraHookingDlg::OnLastmileQuality(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_LASTMILE_QUALITY lpData = (LPAGE_LASTMILE_QUALITY)wParam;
 
-	if (lpData ){
+	if (lpData ) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -497,7 +500,7 @@ LRESULT CAgoraHookingDlg::OnLastmileQuality(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnVideoDeviceStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_VIDEO_DEVICE_STATE_CHANGED lpData = (LPAGE_VIDEO_DEVICE_STATE_CHANGED)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -508,7 +511,7 @@ LRESULT CAgoraHookingDlg::OnVideoDeviceStateChanged(WPARAM wParam, LPARAM lParam
 LRESULT CAgoraHookingDlg::OnFirstLocalVideoFrame(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_FIRST_LOCAL_VIDEO_FRAME lpData = (LPAGE_FIRST_LOCAL_VIDEO_FRAME)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -519,7 +522,7 @@ LRESULT CAgoraHookingDlg::OnFirstLocalVideoFrame(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnFirstRemoteVideoDecoded(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_FIRST_REMOTE_VIDEO_DECODED lpData = (LPAGE_FIRST_REMOTE_VIDEO_DECODED)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -530,7 +533,7 @@ LRESULT CAgoraHookingDlg::OnFirstRemoteVideoDecoded(WPARAM wParam, LPARAM lParam
 LRESULT CAgoraHookingDlg::OnFirstRemoteVideoFrame(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_FIRST_REMOTE_VIDEO_FRAME lpData = (LPAGE_FIRST_REMOTE_VIDEO_FRAME)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -541,7 +544,7 @@ LRESULT CAgoraHookingDlg::OnFirstRemoteVideoFrame(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_USER_JOINED lpData = (LPAGE_USER_JOINED)wParam;
-	if (lpData){
+	if (lpData) {
 
 		CAgoraFormatStr::AgoraWriteLog("%s uid: %u", __FUNCTION__, lpData->uid);
 
@@ -570,7 +573,7 @@ LRESULT CAgoraHookingDlg::OnUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_USER_OFFLINE lpData = (LPAGE_USER_OFFLINE)wParam;
-	if (lpData){
+	if (lpData) {
 
 		if (m_uInviter == lpData->uid || TRUE) {
 
@@ -597,7 +600,7 @@ LRESULT CAgoraHookingDlg::OnUserOffline(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnUserMuteAudio(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_USER_MUTE_AUDIO lpData = (LPAGE_USER_MUTE_AUDIO)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -608,7 +611,7 @@ LRESULT CAgoraHookingDlg::OnUserMuteAudio(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnUserMuteVideo(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_USER_MUTE_VIDEO lpData = (LPAGE_USER_MUTE_VIDEO)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -624,7 +627,7 @@ LRESULT CAgoraHookingDlg::OnApiCallExecuted(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnLocalVideoStats(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_LOCAL_VIDEO_STAT lpData = (LPAGE_LOCAL_VIDEO_STAT)wParam;
-	if (lpData){
+	if (lpData) {
 
 
 		delete lpData; lpData = nullptr;
@@ -636,7 +639,7 @@ LRESULT CAgoraHookingDlg::OnLocalVideoStats(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnRemoteVideoStats(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_REMOTE_VIDEO_STAT lpData = (LPAGE_REMOTE_VIDEO_STAT)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -667,7 +670,7 @@ LRESULT CAgoraHookingDlg::OnConnectionInterrupted(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnUserEnableVideo(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_USER_MUTE_VIDEO lpData = (LPAGE_USER_MUTE_VIDEO)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}
@@ -688,7 +691,7 @@ LRESULT CAgoraHookingDlg::OnStopRecordingService(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraHookingDlg::OnRefreshRecordingServiceStatus(WPARAM wParam, LPARAM lParam)
 {
 	LPAGE_RCDSRV_STATUS lpData = (LPAGE_RCDSRV_STATUS)wParam;
-	if (lpData){
+	if (lpData) {
 
 		delete lpData; lpData = nullptr;
 	}

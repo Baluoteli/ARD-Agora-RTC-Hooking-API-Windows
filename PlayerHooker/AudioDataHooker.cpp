@@ -4,7 +4,7 @@
 #include <mmreg.h>
 #include "detours.h"
 
-CAPIHookLog CAudioDataHooker::ms_log(_T("D:\\V6room\\PlayerHookerV6.txt"));
+CAPIHookLog CAudioDataHooker::ms_log(_T("D:\\AgoraHookLog\\PlayerHookerV6.txt"));
 CHookDataPoolVector CAudioDataHooker::ms_hookDataPools;
 CLock CAudioDataHooker::ms_lockHookDataPools;
 CHookWaveOutMap CAudioDataHooker::ms_hookWaveOuts;
@@ -228,7 +228,7 @@ void CAudioDataHooker::OnIntervalExecute()
 			{
 				if (audioChunk.GetDataSize() <= dwNOTIFY_SIZE * 2)
 				{
-					//FILE* outfile = fopen("D:\\V6room\\HookSrc.pcm", "ab+");
+					//FILE* outfile = fopen("D:\\AgoraHookLog\\HookSrc.pcm", "ab+");
 					if (isSaveDumpPcm){
 						FILE* outfile = fopen(CStringA(m_strHooKPcmPath.data()), "ab+");
 						if (outfile)
@@ -331,14 +331,19 @@ BOOL CAudioDataHooker::StartWork(const TCHAR* pHookProcessPath, HINSTANCE hModul
 	memset(buf, 0, sizeof(buf));
 
 	//SetTargetAppPath force
-	TCHAR exePath[256] = { '\0' };
-	findPlayerPath("KuGou.exe", 256, exePath);
+#if 0
+	TCHAR exePath[MAX_PATH] = { '\0' };
+	//findPlayerPath("KuGou.exe", 256, exePath);
+	QueryDir(eHookPlayerType::ePlayer_KwMusic7,exePath);
+	CAudioDataHooker::ms_log.Trace(_T("QueryDir exePath: %s\n"),exePath);
 	m_sharedMem.SetValue(pszHOOK_PROCESS_PATH_SECTION_NAME, (void*)exePath,
 		(DWORD)_tcsclen(exePath) * sizeof(TCHAR));
 	memcpy(m_strApp, (void*)exePath, sizeof(DWORD) * _tcsclen(exePath) * sizeof(TCHAR));
+#endif
 
+	CAudioDataHooker::ms_log.Trace(_T("buf: %s, pHookProcessPath: %s\n"), buf, pHookProcessPath);
 	if (!m_sharedMem.GetValue(pszHOOK_PROCESS_PATH_SECTION_NAME, buf, &valueSize))
-	{
+	{	
 		return FALSE;
 	}
 	if (_tcsicmp(buf, pHookProcessPath) == 0 && !m_hook)
@@ -369,7 +374,7 @@ BOOL CAudioDataHooker::StartWork(const TCHAR* pHookProcessPath, HINSTANCE hModul
 		TCHAR tchHookPcmPath[MAX_PATH] = { _T("\0") };
 		LPTSTR lpLastSlash = _tcsrchr(hookDllFilePath,_T('\\'));
 		memcpy(tchHookPcmPath, hookDllFilePath, sizeof(TCHAR) * (lpLastSlash - hookDllFilePath));
-		_tcscat(tchHookPcmPath, _T("\\V6room\\HookSrc.pcm"));
+		_tcscat(tchHookPcmPath, _T("\\AgoraHookLog\\HookSrc.pcm"));
 		m_strHooKPcmPath = tchHookPcmPath;
 		DeleteFile(tchHookPcmPath);
 		CAudioDataHooker::ms_log.Trace(_T("StartWork HookSrc AudioData Path : %s\n"),CString(m_strHooKPcmPath.data()));
@@ -508,6 +513,11 @@ void CAudioDataHooker::DeleteHookDataPool(CAudioDataPool* pHookDataPool)
 		ms_hookDataPools.erase(itr);
 		delete pHookDataPool;
 	}
+}
+
+void CAudioDataHooker::setStrAPP(const TCHAR* pHookPlayerFilePath)
+{
+	memcpy(m_strApp, (void*)pHookPlayerFilePath, sizeof(DWORD) * _tcsclen(pHookPlayerFilePath) * sizeof(TCHAR));
 }
 
 //dsound
@@ -946,7 +956,6 @@ void CAudioDataHooker::Hook()
 	m_dsoundDll = LoadLibrary(_T("dsound.dll"));
 	m_origDirectSoundCreate = (PFN_DIRECTSOUNDCREATE)GetProcAddress(m_dsoundDll, "DirectSoundCreate");
 	DetourAttach(&(PVOID&)m_origDirectSoundCreate, &HookDirectSoundCreate);
-
 
 	m_origDirectSoundCreate8 = (PFN_DIRECTSOUNDCREATE8)GetProcAddress(m_dsoundDll, "DirectSoundCreate8");
 	DetourAttach(&(PVOID&)m_origDirectSoundCreate8, &HookDirectSoundCreate8);

@@ -23,6 +23,7 @@ int CPlayerHookerV6::startHook(TCHAR* playerPath)
 {
 	memcpy(m_HookExePath, (void*)playerPath, _tcsclen(playerPath) * sizeof(TCHAR));
 	CAudioDataHooker::ms_log.Trace(_T("startHook: %s\n"), m_HookExePath);
+
 	if (IsProcessRunning(playerPath))
 	{
 		if (!isHooking())

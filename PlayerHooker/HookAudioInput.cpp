@@ -32,7 +32,7 @@ CHookAudioInput::CHookAudioInput():
 	TCHAR tchPcmPath[MAX_PATH] = { _T("\0") };
 	ZeroMemory(tchPcmPath,MAX_PATH);
 	memcpy(tchPcmPath, szBuf, sizeof(TCHAR) * (lpLastSlash - szBuf));
-	_tcscat(tchPcmPath,_T("\\V6room\\HookDest.pcm"));
+	_tcscat(tchPcmPath,_T("\\AgoraHookLog\\HookDest.pcm"));
 	CAudioDataHooker::ms_log.Trace(_T("AudioIniput Notify PcmPath: %s\n"),tchPcmPath);
 	m_strAudioPcmPath = tchPcmPath;
 	DeleteFile(CString(tchPcmPath));
@@ -127,7 +127,7 @@ void CHookAudioInput::Execute()
 					//CAudioDataHooker::ms_log.Trace(_T("Audio_DATA_SECTION_NAME: %d\n"),hookDataLen);
 					if (isSaveDumpPcm){
 
-						//FILE* outfile = fopen("D:\\V6room\\HookDest.pcm", "ab+");
+						//FILE* outfile = fopen("D:\\AgoraHookLog\\HookDest.pcm", "ab+");
 						FILE* outfile = fopen(CStringA(m_strAudioPcmPath.data()), "ab+");
 						if (outfile)
 						{

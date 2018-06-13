@@ -40,11 +40,11 @@ BOOL getCurLogDir(LPTSTR lpCurAppPath, LPTSTR lpCurDllPath)
 	//CAudioDataHooker::ms_log.Trace(_T("hookDll piror path: [%s %d]\n"), szbufDll, lpLastSlashDll - lpCurDllPath);
 
 	CString csHookLogPath;
-	csHookLogPath.Format(_T("%s\\V6room\\%s"), szbufDll, _T("PlayerHookerV6_1.log"));
+	csHookLogPath.Format(_T("%s\\AgoraHookLog\\%s"), szbufDll, _T("PlayerHookerV6_1.log"));
 	CAudioDataHooker::ms_log.SetLogPath(csHookLogPath.GetBuffer());
 	
 	//create logdir
-	CreateDirectory(szbufDll + CString(_T("\\V6room\\")), NULL);
+	CreateDirectory(szbufDll + CString(_T("\\AgoraHookLog\\")), NULL);
 
 	if (0 == _tcsicmp(szbufDll, szBuf)) {
 		//delete logfile before

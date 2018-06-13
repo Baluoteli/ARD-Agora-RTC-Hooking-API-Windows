@@ -158,10 +158,10 @@ void CAssistantBox::OnShowWindow(BOOL bShow, UINT nStatus)
 	std::string uid = gConfigHook.getLoginUid(gInstance);
 	m_EditLoginUid.SetWindowTextW(s2cs(uid));
 	m_CheckBoxHook.SetCheck(TRUE);
-	m_ComHookPlayerList.AddString(L"QQÒôÀÖ");
-	m_ComHookPlayerList.AddString(L"ÍøÒ×ÒôÀÖ");
-	m_ComHookPlayerList.AddString(L"¿áÎÒÒôÀÖ");
 	m_ComHookPlayerList.AddString(L"¿á¹·ÒôÀÖ");
+	m_ComHookPlayerList.AddString(L"ÍøÒ×ÒôÀÖ");
+	m_ComHookPlayerList.AddString(L"QQÒôÀÖ");
+	//m_ComHookPlayerList.AddString(L"¿áÎÒÒôÀÖ");
 	m_ComHookPlayerList.SetCurSel(0);
 
 	std::string strChannel = gConfigHook.getChannelName();
@@ -249,6 +249,7 @@ void CAssistantBox::OnBnClickedButtonInvite()
 	lpData->channelName = cs2s(strParam);
 	m_EditInviter.GetWindowTextW(strParam);
 	lpData->uInviterId = str2long(cs2s(strParam));
+	lpData->nHookType = m_ComHookPlayerList.GetCurSel();
 
 	theApp.GetMainWnd()->PostMessageW(WM_MSGID(EID_INVITER_JOINCHANNEL),WPARAM(lpData));
 }

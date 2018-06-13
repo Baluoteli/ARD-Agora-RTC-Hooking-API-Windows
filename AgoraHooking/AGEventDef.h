@@ -255,6 +255,7 @@ typedef struct _AGE_INVITER_JOINCHANNEl
 {
 	std::string channelName;
 	UINT uInviterId;
+	int nHookType;
 
 }AGE_INVITER_JOINCHANNEL,*PAGE_INVITER_JOINCHANNEL,*LPAGE_INVITER_JOINCHANNEL;
 
