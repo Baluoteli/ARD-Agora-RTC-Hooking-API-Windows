@@ -1,6 +1,6 @@
 #ifndef __PLAYER_HOOKER_IMPL_H__
 #define __PLAYER_HOOKER_IMPL_H__
-#include "IAgoraPlayerHooker.h"
+#include "IAgoraPlayerHook.h"
 #include "Thread.h"
 #include "SleepEvent.h"
 

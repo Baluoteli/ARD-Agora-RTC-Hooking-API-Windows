@@ -1,7 +1,7 @@
 #include "ConvertPCM.h"
 #include "Utils.h"
 #include "HookAudioInput.h"
-#include "IAgoraPlayerHooker.h"
+#include "IAgoraPlayerHook.h"
 
 const DWORD dwDEFAULT_BLOCK_COUNT = 16;
 const DWORD dwCAPTURE_BUFFER_SIZE = dwNOTIFY_SIZE * dwDEFAULT_BLOCK_COUNT;

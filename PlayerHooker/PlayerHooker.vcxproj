@@ -127,7 +127,7 @@
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="HookAudioDll.h" />
     <ClInclude Include="HookDSoundBuffer.h" />
-    <ClInclude Include="include\IAgoraPlayerHooker.h" />
+    <ClInclude Include="include\IAgoraPlayerHook.h" />
     <ClInclude Include="IntervalThread.h" />
     <ClInclude Include="PlayerHookerImpl.h" />
     <ClInclude Include="ResamplerEx.h" />
