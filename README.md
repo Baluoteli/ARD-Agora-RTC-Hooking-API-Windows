@@ -1,16 +1,12 @@
 # ARD-Agora-RTC-Hooking-API-Windows
 
-The demo mainly explains how to use HOOK to do double-window operation on window pc
+The current demo is mainly written for heroes
 
 With this sample Code you can:
 
 - join/leave channel
 
-- show local /remote video stream
-
 - Listen to /play remote audio stream
-
-- switch Native video capture divices
 
 - switch Native audio capture devices
 
