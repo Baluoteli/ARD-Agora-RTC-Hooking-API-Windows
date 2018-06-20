@@ -43,6 +43,7 @@ BEGIN_MESSAGE_MAP(CAgoraHookingDlg, CDialogEx)
 	ON_WM_NCLBUTTONUP()
 	ON_WM_SHOWWINDOW()
 	ON_WM_MOUSEMOVE()
+	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE,onButtonCloseClicked)
 	ON_BN_CLICKED(IDC_BUTTON_MIN,onButtonMinClicked)
 
@@ -92,6 +93,9 @@ BOOL CAgoraHookingDlg::OnInitDialog()
 	}
 
 	initCtrl();
+	ShowWindow(SW_HIDE);
+	SetTimer(1, 10, NULL);
+
 	initResource();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -161,7 +165,9 @@ void CAgoraHookingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		ClientToScreen(&rt);
 		RECT rtAssistangBox;
 		m_pAssistantBox->GetClientRect(&rtAssistangBox);
-		m_pAssistantBox->MoveWindow(rt.right, rt.top, rtAssistangBox.right - rtAssistangBox.left, rt.bottom - rt.top);
+		ShowWindow(SW_HIDE);
+		//m_pAssistantBox->MoveWindow(rt.right, rt.top, rtAssistangBox.right - rtAssistangBox.left, rt.bottom - rt.top);
+		m_pAssistantBox->CenterWindow(this);
 		m_pAssistantBox->ShowWindow(SW_SHOW);
 	}
 }
@@ -186,6 +192,18 @@ void CAgoraHookingDlg::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	CDialogEx::OnMouseMove(nFlags, point);
+}
+
+void CAgoraHookingDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (nIDEvent == 1) {
+
+		KillTimer(nIDEvent);
+		ShowWindow(SW_MINIMIZE);
+		ShowWindow(SW_HIDE);
+		m_pAssistantBox->CenterWindow();
+		m_pAssistantBox->ShowWindow(SW_SHOW);
+	}
 }
 
 BOOL CAgoraHookingDlg::PreTranslateMessage(MSG* pMsg)
@@ -259,7 +277,7 @@ inline void CAgoraHookingDlg::initResource()
 	m_lpAgoraObject->EnableWebSdkInteroperability(TRUE);
 	m_lpAgoraObject->EnableLocalMirrorImage(FALSE);
 
-	m_lpAgoraObject->EnableVideo(TRUE);
+	m_lpAgoraObject->EnableVideo(FALSE);
 	m_lpAgoraObject->EnableAudio(TRUE);
 
 	m_lpAgoraObject->SetVideoRenderType(1);//DISPLAY_GDI
@@ -301,6 +319,10 @@ inline void CAgoraHookingDlg::initResource()
 		CAgoraFormatStr::AgoraWriteLog(("RtmpParam Width: %d,Height: %d,Fps: %d,Bitrate: %d,URL: %s"), pp.width, pp.height, pp.fps, pp.bitrate, (pp.rtmpUrl).data());
 		CAgoraFormatStr::AgoraOutDebugStr(_T("Rtmp Wdith: %d,Height: %d,Fps: %d,Bitrate: %d \r\n URL : %s"), pp.width, pp.height, pp.fps, pp.bitrate, s2cs(pp.rtmpUrl));
 	}
+
+	m_lpAgoraObject->MuteLocalVideo(TRUE);
+	m_lpAgoraObject->MuteAllRemoteVideo(TRUE);
+	m_lpAgoraObject->EnableLocalVideo(FALSE);
 }
 
 inline void CAgoraHookingDlg::uninitResource()
@@ -361,7 +383,7 @@ LRESULT CAgoraHookingDlg::OnInviterJoinChannel(WPARAM wParam, LPARAM lParam)
 	if (lpData) {
 		
 		m_uInviter = lpData->uInviterId;
-		m_lpAgoraObject->LocalVideoPreview(m_hWndRightSelf, TRUE);
+		m_lpAgoraObject->LocalVideoPreview(/*m_hWndRightSelf*/NULL, TRUE);
 		m_lpAgoraObject->JoinChannel(s2cs(m_strChannel), m_uLoginUid);
 
 		CString strDir;
@@ -383,7 +405,12 @@ LRESULT CAgoraHookingDlg::OnJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 
 		char szbuf[256] = { '\0' };
 		sprintf_s(szbuf, "[%s] [%d]", lpData->channel, lpData->uid);
+#if 0
 		::SetWindowTextW(m_hWndTitle, s2cs(szbuf));
+#else
+		if (m_pAssistantBox)
+			m_pAssistantBox->setBoxTitle(s2cs(szbuf));
+#endif
 
 		delete lpData; lpData = nullptr;
 	}
@@ -558,7 +585,7 @@ LRESULT CAgoraHookingDlg::OnUserJoined(WPARAM wParam, LPARAM lParam)
 				VideoCanvas vc;
 				vc.renderMode = RENDER_MODE_TYPE::RENDER_MODE_HIDDEN;
 				vc.uid = lpData->uid;
-				vc.view = m_hWndLeftRemote;
+				vc.view = /*m_hWndLeftRemote*/NULL;
 				::ShowWindow(m_hWndLeftRemote, SW_SHOW);
 				m_lpRtcEngine->setupRemoteVideo(vc);
 			}

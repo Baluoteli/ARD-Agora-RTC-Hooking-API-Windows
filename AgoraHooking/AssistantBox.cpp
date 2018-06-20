@@ -13,6 +13,7 @@ IMPLEMENT_DYNAMIC(CAssistantBox, CDialogEx)
 CAssistantBox::CAssistantBox(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CAssistantBox::IDD, pParent),
 	m_hWndVideoTest(nullptr),
+	m_hWndVideoTitle(nullptr),
 	m_bIsShow(TRUE),
 	m_lpHookPlayerInstance(nullptr)
 {
@@ -158,6 +159,7 @@ void CAssistantBox::OnShowWindow(BOOL bShow, UINT nStatus)
 	std::string uid = gConfigHook.getLoginUid(gInstance);
 	m_EditLoginUid.SetWindowTextW(s2cs(uid));
 	m_CheckBoxHook.SetCheck(TRUE);
+	m_ComHookPlayerList.ResetContent();
 	m_ComHookPlayerList.AddString(L"¿á¹·ÒôÀÖ");
 	m_ComHookPlayerList.AddString(L"ÍøÒ×ÒôÀÖ");
 	m_ComHookPlayerList.AddString(L"QQÒôÀÖ");
@@ -190,6 +192,8 @@ inline void CAssistantBox::initCtrl()
 
 	RECT rt;
 	GetClientRect(&rt);
+	m_hWndVideoTitle = CreateWindow(L"Static", L"", WS_CHILD | WS_VISIBLE | SS_LEFT, rt.left, rt.top, 300, 22, m_hWnd, NULL, NULL, NULL);
+
 	rt.left = rt.right - 22;
 	rt.bottom = rt.top + 22;
 
@@ -224,8 +228,15 @@ inline void CAssistantBox::uninitResource()
 
 }
 
+void CAssistantBox::setBoxTitle(CString strTitle)
+{
+	::SetWindowText(m_hWndVideoTitle, strTitle);
+}
+
 void CAssistantBox::onButtonCloseClicked()
 {
+	::PostMessage(theApp.GetMainWnd()->m_hWnd, WM_COMMAND,IDCANCEL, NULL);
+
 	uninitResource();
 	uninitCtrl();
 

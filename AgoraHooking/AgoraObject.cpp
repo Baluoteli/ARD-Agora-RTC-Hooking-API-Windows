@@ -362,6 +362,18 @@ BOOL CAgoraObject::IsVideoEnabled()
 	return m_bVideoEnable;
 }
 
+BOOL CAgoraObject::EnableLocalVideo(BOOL bEnable /*= TRUE*/)
+{
+	ASSERT(m_lpAgoraEngine != NULL);
+
+	int ret = 0;
+	RtcEngineParameters rep(*m_lpAgoraEngine);
+
+	if (bEnable)
+		ret = rep.enableLocalVideo(bEnable);
+
+	return ret == 0 ? TRUE : FALSE;
+}
 
 BOOL CAgoraObject::EnableScreenCapture(HWND hWnd, int nCapFPS, LPCRECT lpCapRect, BOOL bEnable)
 {

@@ -18,6 +18,7 @@ public:
 	virtual ~CAssistantBox();
 	BOOL isShow(){ return m_bIsShow; }
 	void setWnd(HWND wnd){ m_hWndVideoTest = wnd; }
+	void setBoxTitle(CString strTitle);
 
 	virtual void OnFinalRelease();
 
@@ -67,6 +68,7 @@ private:
 	CAgoraPlayoutManager m_AgoraPlayoutManager;
 	CAgoraAudInputManager m_AgoraAudioInputManager;
 	HWND m_hWndVideoTest;
+	HWND m_hWndVideoTitle;
 
 	CComboBox m_ComCameraList;
 	CComboBox m_ComAudioInputList;
