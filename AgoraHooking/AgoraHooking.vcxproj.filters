@@ -19,11 +19,11 @@
     <Filter Include="Utilc">
       <UniqueIdentifier>{d0b9c329-0d2a-4570-8299-7d9798a7f4f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AgoraMediaSDK">
-      <UniqueIdentifier>{257f8764-3fdd-4eaa-9995-338e8db8df5d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="AgoraHook">
       <UniqueIdentifier>{409902fd-d8e8-4ed9-ba1a-8dffab76bf7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AgoraMediaSDK">
+      <UniqueIdentifier>{257f8764-3fdd-4eaa-9995-338e8db8df5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

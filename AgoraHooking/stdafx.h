@@ -53,7 +53,6 @@ extern BOOL gIsSaveDumpPcm;
 #include "../HookSDK/Include/IAgoraPlayerHook.h"
 #pragma comment(lib,"../HookSDK/lib/agora_playhook_sdk.lib")
 
-
 #pragma warning(disable:4800)
 #pragma warning(disable:4244)
 #pragma warning(disable:4101)
