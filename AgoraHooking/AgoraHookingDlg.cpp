@@ -274,11 +274,6 @@ inline void CAgoraHookingDlg::initResource()
 	m_lpAgoraObject->setAudioAgcOn(FALSE);
 	m_lpAgoraObject->setAudioNS(FALSE);
 
-	m_lpExtendAudioFrame = new CExtendAudioFrameObserver;
-	if (m_lpExtendAudioFrame)
-		m_lpAgoraObject->EnableExtendAudioCapture(TRUE, m_lpExtendAudioFrame);
-	m_lpAgoraObject->SetAudioRecordParam(KNSampelRate,KNChannel,KNSampelPerCall);
-
 	//RTMP
 	BOOL bEnableRotate = str2int(gConfigHook.getLeftRotate90(m_strInstance));
 	BOOL bEnableRtmp = str2int(gConfigHook.getRtmpSave(m_strInstance));
@@ -360,6 +355,11 @@ LRESULT CAgoraHookingDlg::OnInviterJoinChannel(WPARAM wParam, LPARAM lParam)
 	LPAGE_INVITER_JOINCHANNEL lpData = (LPAGE_INVITER_JOINCHANNEL)wParam;
 	if (lpData) {
 		
+		m_lpExtendAudioFrame = new CExtendAudioFrameObserver;
+		if (m_lpExtendAudioFrame)
+			m_lpAgoraObject->EnableExtendAudioCapture(TRUE, m_lpExtendAudioFrame);
+		m_lpAgoraObject->SetAudioRecordParam(KNSampelRate, KNChannel, KNSampelPerCall);
+
 		m_uInviter = lpData->uInviterId;
 		m_lpAgoraObject->LocalVideoPreview(m_hWndRightSelf, TRUE);
 		m_lpAgoraObject->JoinChannel(s2cs(m_strChannel), m_uLoginUid);
