@@ -161,7 +161,7 @@ void CAssistantBox::OnShowWindow(BOOL bShow, UINT nStatus)
 	m_ComHookPlayerList.AddString(L"ø·π∑“Ù¿÷");
 	m_ComHookPlayerList.AddString(L"Õ¯“◊“Ù¿÷");
 	m_ComHookPlayerList.AddString(L"QQ“Ù¿÷");
-	//m_ComHookPlayerList.AddString(L"ø·Œ““Ù¿÷");
+	m_ComHookPlayerList.AddString(L"ø·Œ““Ù¿÷");
 	m_ComHookPlayerList.SetCurSel(0);
 
 	std::string strChannel = gConfigHook.getChannelName();
