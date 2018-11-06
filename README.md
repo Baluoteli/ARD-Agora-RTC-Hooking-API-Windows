@@ -54,6 +54,8 @@ HookSDK will produce a log file PlayerHookV6_1.log in the ./AgoraHookLog directo
 
 - Window 7 or Higher
 
+- AgoraMediaSDK Adapt To 2.2.1
+
 
 
 
