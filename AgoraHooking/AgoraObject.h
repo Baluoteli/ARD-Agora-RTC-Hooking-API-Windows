@@ -4,6 +4,8 @@
 #include "../AgoraSDK/include/IAgoraRtcEngine.h"
 #include "../AgoraSDK/include/IAgoraRtcEngine2.h"
 #include "../AgoraSDK/include/IAgoraMediaEngine.h"
+#include "../AgoraSDK/include/AgoraBase.h"
+using namespace agora;
 
 #include "AGEngineEventHandler.h"
 #include "AGEventDef.h"
@@ -89,7 +91,7 @@ public:
 	BOOL EnableVideo(BOOL bEnable = TRUE);
 	BOOL IsVideoEnabled();
 
-	BOOL EnableScreenCapture(HWND hWnd, int nCapFPS = 15, LPCRECT lpCapRect = NULL, BOOL bEnable = TRUE);
+	BOOL EnableScreenCapture(HWND hWnd, int nBitrate,int nCapFPS = 15, LPCRECT lpCapRect = NULL, BOOL bEnable = TRUE);
 	BOOL IsScreenCaptureEnabled();
 
 	BOOL MuteLocalAudio(BOOL bMuted = TRUE);
